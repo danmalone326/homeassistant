@@ -1,0 +1,24 @@
+#!/usr/bin/python3
+
+friendlyName = input("Friendly Name (e.g. Dining Room): ")
+name = input("Name (e.g. diningRoom): ")
+mac6 = input("Last 6 of MAC address (e.g. F393A4): ")
+print("")
+
+friendlyNameKey = "@FRIENDLY_NAME@"
+nameKey = "@NAME@"
+mac6Key = "@MAC6@"
+
+def replaceAll(string):
+    global friendlyName, name, mac6
+    global friendlyNameKey, nameKey, mac6Key
+    
+    result = string.replace(friendlyNameKey,friendlyName).replace(nameKey,name).replace(mac6Key,mac6)
+    
+    print(result)
+
+templateFile = "shellyDimmer.template"
+with open(templateFile,'r') as file:
+    line = file.read()
+    replaceAll(line)
+

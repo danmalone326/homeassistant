@@ -1,0 +1,33 @@
+# Add these to the appropriate sections of the Home Assistant configuration.yaml
+#
+sensor:
+  - platform: mqtt
+    unique_id: "@NAME@Temperature-@MAC6@"
+    name: "@FRIENDLY_NAME@ Temperature"
+    state_topic: "shellies/shellydimmer-@MAC6@/temperature_f"
+    device_class: temperature
+    unit_of_measurement: '°F'
+  - platform: mqtt
+    unique_id: "@NAME@Power-@MAC6@"
+    name: "@FRIENDLY_NAME@ Power"
+    state_topic: "shellies/shellydimmer-@MAC6@/light/0/power"
+    device_class: power
+    unit_of_measurement: 'W'
+  - platform: mqtt
+    unique_id: "@NAME@Energy-@MAC6@"
+    name: "@FRIENDLY_NAME@ Energy"
+    state_topic: "shellies/shellydimmer-@MAC6@/light/0/energy"
+    device_class: power
+    unit_of_measurement: 'kWh'
+#
+light:
+  - platform: mqtt
+    schema: template
+    name: "@FRIENDLY_NAME@"
+    unique_id: "@NAME@-@MAC6@"
+    state_topic: "shellies/shellydimmer-@MAC6@/light/0/status"
+    command_topic: "shellies/shellydimmer-@MAC6@/light/0/set"
+    state_template: '{% if value_json.ison %} on {% else %} off {% endif %}'
+    command_on_template: '{"turn": "on"{% if brightness is defined %}, "brightness": {{(brightness | float * 0.3882 + 1) | round(0)}}{% endif %}}'
+    command_off_template: '{"turn": "off"}'
+    brightness_template: '{{ (value_json.brightness | float * 2.55) | round(0) }}'
